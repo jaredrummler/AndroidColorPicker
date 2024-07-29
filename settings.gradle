@@ -20,5 +20,5 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = "ColorPicker"
-include(":app")
-include(":library")
+include ':app'
+include ':library'
