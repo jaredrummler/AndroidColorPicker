@@ -23,6 +23,13 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+    publishing {
+        singleVariant("release") {
+            // if you don't want sources/javadoc, remove these lines
+            withSourcesJar()
+            withJavadocJar()
+        }
+    }
     buildFeatures {
         buildConfig = false
     }
