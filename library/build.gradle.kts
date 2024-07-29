@@ -6,10 +6,11 @@ plugins {
 
 android {
     namespace = "com.jaredrummler.android.colorpicker"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         minSdk = 21
+        testOptions.targetSdk  = 34
         consumerProguardFiles("consumer-rules.pro")
     }
 
@@ -29,11 +30,28 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
+    buildFeatures{
+        buildConfig = false
+    }
+}
+
+afterEvaluate {
+    publishing{
+        publications{
+            create<MavenPublication>("release") {
+                // Applies the component for the release build variant.
+                from(components["release"])
+            }
+        }
+    }
 }
 //noinspection UseTomlInstead
 dependencies {
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.appcompat)
-    implementation(libs.material)
-    implementation("androidx.preference:preference-ktx:1.2.1")
+    api ("androidx.core:core-ktx:1.13.1")
+//    implementation(libs.androidx.core.ktx)
+//    implementation(libs.androidx.appcompat)
+    api ("com.google.android.material:material:1.12.0")
+
+//    implementation(libs.material)
+    api("androidx.preference:preference-ktx:1.2.1")
 }
