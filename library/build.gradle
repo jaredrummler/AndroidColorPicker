@@ -1,20 +1,55 @@
-apply plugin: 'com.android.library'
+plugins {
+    id 'com.android.library'
+    id 'kotlin-android'
+    id 'maven-publish'
+}
 
 android {
-  compileSdkVersion buildConfig.compileSdk
-  resourcePrefix "cpv_"
-  defaultConfig {
-    minSdkVersion buildConfig.minSdk
-    targetSdkVersion buildConfig.targetSdk
-  }
-  lintOptions {
-    abortOnError false
-  }
+    namespace 'com.jaredrummler.android.colorpicker'
+    compileSdk 34
+
+    defaultConfig {
+        minSdk 21
+        consumerProguardFiles "consumer-rules.pro"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    publishing {
+        singleVariant("release") {
+            // if you don't want sources/javadoc, remove these lines
+            withSourcesJar()
+            withJavadocJar()
+        }
+    }
+    buildFeatures {
+        buildConfig = false
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+}
+afterEvaluate {
+    publishing {
+        publications {
+            release(MavenPublication) {
+                from components.release
+            }
+        }
+    }
 }
 
 dependencies {
-  implementation deps.androidx.appCompat
-  implementation deps.androidx.preferences
-}
+    api 'androidx.core:core-ktx:1.13.1'
+    api 'com.google.android.material:material:1.12.0'
+    api 'androidx.preference:preference-ktx:1.2.1'
 
-apply from: rootProject.file('gradle/maven-push.gradle')
+}
